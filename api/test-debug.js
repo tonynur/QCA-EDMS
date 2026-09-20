@@ -2,46 +2,35 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxHv0P-UlPghtjj
 
 module.exports = async function handler(req, res) {
   const result = {
-    step1_requestUrl: req.url,
-    step2_env: process.version,
-    logs: []
+    requestUrl: req.url,
+    nodeVersion: process.version
   };
 
   try {
-    // Parse query
     const fullUrl = new URL(req.url, 'https://qca-edms.vercel.app');
     const qs = fullUrl.searchParams.toString() || 'api=1&apiAction=test';
     const targetUrl = APPS_SCRIPT_URL + '?' + qs;
-    result.step3_targetUrl = targetUrl;
+    result.targetUrl = targetUrl;
 
-    // Fetch dengan redirect MANUAL untuk lihat redirect asli
-    const firstRes = await fetch(targetUrl, {
+    const appsRes = await fetch(targetUrl, {
       method: 'GET',
-      redirect: 'manual'
-    });
-    result.step4_firstStatus = firstRes.status;
-    result.step4_firstLocation = firstRes.headers.get('location') || '(none)';
-    
-    const firstBody = await firstRes.text();
-    result.step5_firstBodyPreview = firstBody.substring(0, 300);
-
-    // Kalau ada redirect, ikuti manual
-    if (firstRes.status >= 300 && firstRes.status < 400) {
-      const redirectUrl = firstRes.headers.get('location');
-      if (redirectUrl) {
-        const secondRes = await fetch(redirectUrl, { method: 'GET' });
-        result.step6_secondStatus = secondRes.status;
-        const secondBody = await secondRes.text();
-        result.step6_secondBodyPreview = secondBody.substring(0, 500);
+      redirect: 'follow',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json,text/plain,*/*',
+        'Accept-Language': 'en-US,en;q=0.9'
       }
-    }
+    });
+
+    result.status = appsRes.status;
+    const text = await appsRes.text();
+    result.bodyPreview = text.substring(0, 500);
 
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).send(JSON.stringify(result, null, 2));
 
   } catch (err) {
     result.error = err.message;
-    result.stack = err.stack;
     return res.status(500).json(result);
   }
 };
