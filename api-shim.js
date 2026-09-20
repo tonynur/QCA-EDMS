@@ -11,7 +11,7 @@ var QCA_API_URL = '/api/proxy';
 function callApi_(action, args, onSuccess, onFailure) {
   fetch(QCA_API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ action: action, args: args || [] })
   })
   .then(function (response) { return response.json(); })
