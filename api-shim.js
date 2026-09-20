@@ -9,7 +9,7 @@ function callApi_(action, args, onSuccess, onFailure) {
     '&apiArgs=' + encodeURIComponent(JSON.stringify(args || []));
 
   // Bungkus dengan CORS proxy
-  var url = 'https://corsproxy.io/?' + encodeURIComponent(appsUrl);
+  var url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(appsUrl);
 
   fetch(url, { method: 'GET' })
     .then(function (r) { return r.text(); })
