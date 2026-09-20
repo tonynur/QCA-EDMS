@@ -1,11 +1,15 @@
-// API SHIM — pakai GET untuk avoid redirect body-loss
-var QCA_API_URL = '/api/proxy';
+// API SHIM — pakai CORS proxy publik
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxHv0P-UlPghtjjUzMiu0Bdi7WqvtNlDmEQmVaOnS1dPQAgdZNZV7piFks72p1GJDz9/exec';
 
 function callApi_(action, args, onSuccess, onFailure) {
-  var url = QCA_API_URL +
+  // Bangun URL Apps Script dengan query
+  var appsUrl = APPS_SCRIPT_URL +
     '?api=1' +
     '&apiAction=' + encodeURIComponent(action) +
     '&apiArgs=' + encodeURIComponent(JSON.stringify(args || []));
+
+  // Bungkus dengan CORS proxy
+  var url = 'https://corsproxy.io/?' + encodeURIComponent(appsUrl);
 
   fetch(url, { method: 'GET' })
     .then(function (r) { return r.text(); })
