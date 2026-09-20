@@ -6,7 +6,7 @@
  */
 
 // ⚠️ GANTI URL di bawah dengan URL Web App Apps Script Anda
-var QCA_API_URL = 'https://script.google.com/macros/s/AKfycbxHv0P-UlPghtjjUzMiu0Bdi7WqvtNlDmEQmVaOnS1dPQAgdZNZV7piFks72p1GJDz9/exec';
+var QCA_API_URL = '/api/proxy'; = 'https://script.google.com/macros/s/AKfycbxHv0P-UlPghtjjUzMiu0Bdi7WqvtNlDmEQmVaOnS1dPQAgdZNZV7piFks72p1GJDz9/exec';
 
 function callApi_(action, args, onSuccess, onFailure) {
   fetch(QCA_API_URL, {
