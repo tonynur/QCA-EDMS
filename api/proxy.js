@@ -8,12 +8,12 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    // ✅ Parse query dari req.url (bukan req.query — sering kosong di Vercel)
-    const fullUrl = new URL(req.url, 'http://localhost');
+    // Parse query langsung dari req.url
+    const fullUrl = new URL(req.url, 'https://qca-edms.vercel.app');
     const qs = fullUrl.searchParams.toString();
     const targetUrl = APPS_SCRIPT_URL + (qs ? '?' + qs : '');
 
-    console.log('Proxying to:', targetUrl);
+    console.log('[PROXY] Target:', targetUrl);
 
     const appsRes = await fetch(targetUrl, {
       method: 'GET',
@@ -21,7 +21,8 @@ module.exports = async function handler(req, res) {
     });
 
     const text = await appsRes.text();
-    console.log('Response preview:', text.substring(0, 200));
+    console.log('[PROXY] Status:', appsRes.status);
+    console.log('[PROXY] Preview:', text.substring(0, 200));
 
     const trimmed = text.trim();
     if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
@@ -36,7 +37,7 @@ module.exports = async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error('Proxy error:', err);
+    console.error('[PROXY] Error:', err);
     return res.status(500).json({ success: false, message: err.message });
   }
 };
