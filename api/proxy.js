@@ -8,16 +8,22 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    // Parse query langsung dari req.url
     const fullUrl = new URL(req.url, 'https://qca-edms.vercel.app');
     const qs = fullUrl.searchParams.toString();
     const targetUrl = APPS_SCRIPT_URL + (qs ? '?' + qs : '');
 
     console.log('[PROXY] Target:', targetUrl);
 
+    // ✅ Pakai User-Agent browser untuk bypass block
     const appsRes = await fetch(targetUrl, {
       method: 'GET',
-      redirect: 'follow'
+      redirect: 'follow',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json,text/plain,*/*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Cache-Control': 'no-cache'
+      }
     });
 
     const text = await appsRes.text();
@@ -33,7 +39,8 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({
       success: false,
       message: 'Apps Script returned non-JSON',
-      preview: trimmed.substring(0, 200)
+      status: appsRes.status,
+      preview: trimmed.substring(0, 300)
     });
 
   } catch (err) {
