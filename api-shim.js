@@ -1,7 +1,4 @@
-// ============================================================================
 // API SHIM — pakai GET untuk avoid redirect body-loss
-// ============================================================================
-
 var QCA_API_URL = '/api/proxy';
 
 function callApi_(action, args, onSuccess, onFailure) {
