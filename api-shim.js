@@ -3,7 +3,7 @@
 // ============================================================================
 
 var SUPABASE_URL = 'https://hbbnysvjssovyvxxrf.supabase.co';
-var SUPABASE_KEY = 'PASTE_ANON_KEY_DI_SINI';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhiYnlueXN2anNzb3Z5eHZ4eHJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MDg4ODIsImV4cCI6MjEwNTQ4NDg4Mn0.ySIReCcPYo2gaMxIRrek32OELT_WklS9-LmY9Ioi5mU';
 
 var sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
